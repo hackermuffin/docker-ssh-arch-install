@@ -1,0 +1,11 @@
+#!/bin/bash
+args=("$@")
+USER=${1%%:*}
+for i in $(seq 1 $(($# - 1)))
+do
+  cd /opt
+  git clone "https://aur.archlinux.org/${args[i]}.git"
+  sudo chown -R $USER:$USER ./${args[i]}
+  cd ${args[i]}
+  su $USER -c 'makepkg -si --noconfirm'
+done
