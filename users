@@ -1,0 +1,20 @@
+#!/bin/bash
+
+sed -i 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
+
+IFS=',' read -ra USERS_KEYS <<< "$1"
+for i in "${!USERS_KEYS[@]}"
+do
+  IFS=':' read -ra USER_KEY <<< "${USERS_KEYS[$i]}"
+  USER=${USER_KEY[0]}
+  KEY=${USER_KEY[1]}
+  useradd --create-home $USER
+  usermod -aG wheel $USER
+  echo "Added sudo user $USER"
+  if [ "$KEY" ]
+  then
+    mkdir -p "/home/$USER/.ssh/"
+    echo $KEY > "/home/$USER/.ssh/authorized_keys"
+    echo "Added SSH key for $USER"
+  fi
+done
