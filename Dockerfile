@@ -18,6 +18,6 @@ COPY users /usr/bin/generate-users
 RUN /usr/bin/generate-users "$USERS_KEYS"
 
 # Install AUR packages
-ARG AUR_PACKAGES="minecraft-server forge-server"
+ARG AUR_PACKAGES="minecraft-server forge-server papermc"
 COPY install-aur /usr/bin/install-aur
 RUN /usr/bin/install-aur "$USERS_KEYS" $AUR_PACKAGES
